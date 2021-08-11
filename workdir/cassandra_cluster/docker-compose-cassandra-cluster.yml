@@ -1,0 +1,39 @@
+version: "3.3"
+services:
+  cassandra-seed:
+    image: cassandra:latest
+    ports:
+        - "0.0.0.0:9042:9042"
+    volumes:
+        - ./db_mt/cassandra_data_seed:/var/lib/cassandra
+    environment:
+        - CASSANDRA_SEEDS=cassandra-seed
+        - CASSANDRA_CLUSTER_NAME=optimus-prime
+        - CASSANDRA_DC=anie_local
+        - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+#    restart: always
+
+  cassandra1:
+    image: cassandra:latest
+    volumes:
+        - ./db_mt/cassandra_data_1:/var/lib/cassandra
+    environment:
+        - CASSANDRA_SEEDS=cassandra-seed
+        - CASSANDRA_CLUSTER_NAME=optimus-prime
+        - CASSANDRA_DC=anie_local
+        - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    depends_on:
+        - cassandra-seed
+
+  cassandra2:
+    image: cassandra:latest
+    volumes:
+        - ./db_mt/cassandra_data_2:/var/lib/cassandra
+    environment:
+        - CASSANDRA_SEEDS=cassandra-seed
+        - CASSANDRA_CLUSTER_NAME=optimus-prime
+        - CASSANDRA_DC=anie_local
+        - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    depends_on:
+        - cassandra-seed
+#    restart: always
