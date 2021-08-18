@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  dse-cassandra:
+    container_name: dse-debizum
+    image: dse-debizum:alpha
+    # build:
+    #   context: ./init
+    ports:
+      - 9042:9042
+    environment:
+      - DS_LICENSE=accept
+    ulimits:
+      memlock: -1
+    volumes:
+      - /var/lib/cassandra
+    # command: >
+    #   bash -c "
+    #   cqlsh -f /opt/dse/resources/debezium/inventory.cql
+    #   "
+  ds-studio:
+    container_name: ds-studio
+    image: datastax/dse-studio
+    ports:
+      - 9091:9091
+    links:
+      - dse-cassandra
+    environment:
+      - DS_LICENSE=accept      

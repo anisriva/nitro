@@ -520,7 +520,7 @@ memtable_allocation_type: heap_buffers
 # The default value is the smaller of 8192, and 1/4 of the total space
 # of the commitlog volume.
 
-# commitlog_total_space_in_mb: 8192
+commitlog_total_space_in_mb: 10
 
 # This sets the number of memtable flush writer threads per disk
 # as well as the total number of memtables that can be flushed concurrently.
@@ -559,7 +559,7 @@ memtable_allocation_type: heap_buffers
 #
 # The default value is the min of 4096 mb and 1/8th of the total space
 # of the drive where cdc_raw_directory resides.
-# cdc_total_space_in_mb: 4096
+cdc_total_space_in_mb: 1024
 
 # When we hit our cdc_raw limit and the CDCCompactor is either running behind
 # or experiencing backpressure, we check at the following interval to see if any
