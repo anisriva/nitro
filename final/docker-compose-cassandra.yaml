@@ -4,14 +4,14 @@ services:
     container_name: zookeeper
     image: debezium/zookeeper:1.6
     ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
+      - "0.0.0.0:2181:2181"
+      - "0.0.0.0:2888:2888"
+      - "0.0.0.0:3888:3888"
   kafka:
     container_name: kafka
     image: debezium/kafka:1.6
     ports:
-      - 9092:9092
+      - "0.0.0.0:9092:9092"
     links:
       - zookeeper
     environment:
@@ -20,12 +20,12 @@ services:
     container_name: cassandra
     image: anieshaz/cassandra:3.11
     ports:
-      - 9042:9042
+      - "0.0.0.0:9042:9042"
     links:
       - zookeeper
       - kafka
     volumes:
-      # - /var/lib/cassandra
+      - /var/lib/cassandra
       - C:\GitHub\Work\Nitro\workdir\inserts.sql:/home/cassandra/sqls/insert.sql
       - C:\GitHub\Work\Nitro\debezium-connector\example\debezium-cassandra-init\cassandra.yaml:/opt/cassandra/conf/cassandra.yaml
       # - C:\GitHub\Work\Nitro\final\.build\debezium-cassandra-init\config.properties:/debezium/config.properties
@@ -67,7 +67,7 @@ services:
     container_name: schema_registry
     image: confluentinc/cp-schema-registry
     ports:
-        - 8181:8181 
+        - "0.0.0.0:8181:8181"
     environment: 
         # - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
         - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:9092
