@@ -67,7 +67,7 @@ services:
     container_name: schema_registry
     image: confluentinc/cp-schema-registry
     ports:
-        - "0.0.0.0:8181:8181"
+        - "0.0.0.0:8100:8181"
     environment: 
         # - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
         - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:9092
@@ -89,4 +89,12 @@ services:
         # - ./mysql/digicert_com_replication.sql:/home/digicert_com_replication.sql
         # - ./mysql/certopedia.sql:/home/certopedia.sql
     ports:
-        - "0.0.0.0:33060:3306"        
+        - "0.0.0.0:33060:3306"
+  cdata-sync:
+    container_name: cdata-sync
+    image: registry.de.dev.blu.digicert.com/cdata-sync:1.0
+    ports:
+      - "0.0.0.0:8400:8443"
+    volumes:
+      - ./cdata/var/opt/sync/libs/:/var/opt/sync/libs
+      - ./cdata/opt/cdata/sync:/opt/cdata/sync
