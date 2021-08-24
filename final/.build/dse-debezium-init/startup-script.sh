@@ -2,6 +2,7 @@
 
 # sh /opt/cassandra/bin/cassandra -f &
 
+
 mkdir $DEBEZIUM_HOME
 
 curl -fSL -o $DEBEZIUM_HOME/debezium-connector-cassandra.jar \

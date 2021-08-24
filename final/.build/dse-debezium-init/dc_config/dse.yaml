@@ -1,0 +1,270 @@
+spark_cluster_info_options:
+  enabled: false
+system_info_encryption:
+  enabled: false
+authentication_options:
+  plain_text_without_ssl: allow
+  enabled: true
+  default_scheme: internal
+  other_schemes: []
+  scheme_permissions: false
+  allow_digest_with_kerberos: true
+  transitional_mode: disabled
+spark_security_enabled: false
+config_encryption_active: false
+histogram_data_options:
+  enabled: true
+  refresh_rate_ms: 10000
+  retention_count: 3
+performance_queue_capacity: 32000
+spark_security_encryption_enabled: false
+spark_process_runner:
+  runner_type: default
+  run_as_runner_options:
+    user_slots:
+    - slot1
+    - slot2
+solr_resource_upload_limit_mb: 10
+resource_level_latency_tracking_options:
+  enabled: false
+spark_application_info_options:
+  enabled: false
+  driver:
+    sink: false
+    connectorSource: false
+    jvmSource: false
+    stateSource: false
+  executor:
+    sink: false
+    connectorSource: false
+    jvmSource: false
+graph:
+  adjacency_cache_size_in_mb: 128
+  index_cache_max_entry_size_in_mb: 0
+  msg:
+    graph_msg_timeout_in_ms: 5000
+  realtime_evaluation_timeout_in_seconds: 30
+  max_query_queue: 10000
+  schema_agreement_timeout_in_ms: 10000
+  gremlin_server:
+    scriptEngines:
+      gremlin-groovy:
+        config:
+          sandbox_enabled: false
+          sandbox_rules:
+            whitelist_packages: []
+            whitelist_types: []
+            whitelist_supers: []
+    maxHeaderSize: 8192
+    maxInitialLineLength: 4096
+    maxAccumulationBufferComponents: 1024
+    serializers:
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0
+      config:
+        ioRegistries:
+        - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistry
+        classResolverSupplier: com.datastax.bdp.graph.impl.tinkerpop.io.DseClassResolverProvider
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GryoLiteMessageSerializerV1d0
+      config:
+        ioRegistries:
+        - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistry
+        classResolverSupplier: com.datastax.bdp.graph.impl.tinkerpop.io.DseClassResolverProvider
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0
+      config:
+        serializeResultToString: true
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerGremlinV1d0
+      config:
+        ioRegistries:
+        - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistry
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerGremlinV2d0
+      config:
+        ioRegistries:
+        - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV2d0
+        - com.datastax.bdp.graph.impl.tinkerpop.io.DseGraphIoRegistryV2d0
+    - className: org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerV1d0
+      config:
+        ioRegistries:
+        - org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistry
+    port: 8182
+    gremlinPool: 0
+    resultIterationBatchSize: 64
+    maxChunkSize: 4096000
+    useEpollEventLoop: false
+    threadPoolWorker: 2
+    maxContentLength: 65536000
+  ids:
+    block_renew: 0.8
+    community_reuse: 28
+    consistency_mode: GLOBAL
+    id_hash_modulus: 20
+    member_block_size: 512
+  max_query_params: 256
+  system_evaluation_timeout_in_seconds: 180
+  analytic_evaluation_timeout_in_minutes: 10080
+  gremlin_server_enabled: true
+  adjacency_cache_max_entry_size_in_mb: 0
+  shared_data:
+    refresh_interval_in_ms: 60000
+  window_size: 100000
+  adjacency_cache_clean_rate: 1024
+  schema_mode: Production
+  index_cache_clean_rate: 1024
+  index_cache_size_in_mb: 128
+kerberos_options:
+  keytab: /etc/dse/conf/dse.keytab
+  service_principal: dse/_HOST@REALM
+  http_principal: HTTP/_HOST@REALM
+  qop: auth
+user_level_latency_tracking_options:
+  enabled: false
+max_solr_concurrency_per_core: 2
+dsefs_options:
+  query_cache_size: 2048
+  query_cache_expire_after_ms: 2000
+  enabled: null
+  block_allocator_options:
+    overflow_margin_mb: 1024
+    overflow_factor: 1.05
+  gossip_options:
+    round_delay_ms: 2000
+    startup_delay_ms: 5000
+    shutdown_delay_ms: 10000
+  transaction_options:
+    transaction_timeout_ms: 60000
+    conflict_retry_delay_ms: 10
+    conflict_retry_count: 40
+    execution_retry_delay_ms: 1000
+    execution_retry_count: 3
+  rest_options:
+    request_timeout_ms: 330000
+    connection_open_timeout_ms: 10000
+    client_close_timeout_ms: 60000
+    server_request_timeout_ms: 300000
+    idle_connection_timeout_ms: 0
+    internode_idle_connection_timeout_ms: 120000
+    core_max_concurrent_connections_per_host: 8
+solr_request_handler_metrics_options:
+  enabled: false
+spark_daemon_readiness_assertion_interval: 1000
+spark_shared_secret_bit_length: 256
+cql_solr_query_paging: 'off'
+internode_messaging_options:
+  port: 8609
+  frame_length_in_mb: 256
+  server_acceptor_threads: 8
+  server_worker_threads: 16
+  client_max_connections: 100
+  client_worker_threads: 16
+  handshake_timeout_seconds: 10
+  client_request_timeout_seconds: 60
+performance_max_threads: 32
+insights_options:
+  data_dir: /var/lib/cassandra/insights_data
+  log_dir: /var/log/cassandra/
+async_bootstrap_reindex: false
+initial_spark_worker_resources: 0.7
+enable_health_based_routing: true
+lease_metrics_options:
+  enabled: false
+enable_back_pressure_adaptive_nrt_commit: true
+back_pressure_threshold_per_core: '2000'
+node_health_options:
+  refresh_rate_ms: 60000
+  uptime_ramp_up_period_seconds: 10800
+  dropped_mutation_window_minutes: 30
+solr_encryption_options:
+  decryption_cache_offheap_allocation: true
+  decryption_cache_size_in_mb: 256
+solr_latency_snapshot_options:
+  enabled: false
+db_summary_stats_options:
+  enabled: false
+enable_index_disk_failure_policy: false
+solr_cache_stats_options:
+  enabled: false
+cluster_summary_stats_options:
+  enabled: false
+max_memory_to_lock_mb: 10240
+solr_slow_sub_query_log_options:
+  enabled: false
+solr_indexing_error_log_options:
+  enabled: false
+system_key_directory: /etc/dse/conf
+solr_index_stats_options:
+  enabled: false
+audit_logging_options:
+  render_cql_literals: false
+  enabled: false
+  cassandra_audit_writer_options:
+    mode: sync
+    write_consistency: QUORUM
+    dropped_event_log: /var/log/cassandra/dropped_audit_events.log
+    day_partition_millis: 3600000
+cql_slow_log_options:
+  enabled: true
+  threshold: 200.0
+  minimum_samples: 100
+  ttl_seconds: 259200
+  skip_writing_to_db: true
+  num_slowest_queries: 5
+cql_solr_query_row_timeout: 10000
+solr_update_handler_metrics_options:
+  enabled: false
+cql_system_info_options:
+  enabled: true
+  refresh_rate_ms: 10000
+advanced_replication_options:
+  enabled: false
+solr_field_cache_enabled: false
+spark_ui_options:
+  encryption: inherit
+  encryption_options:
+    enabled: false
+flush_max_time_per_core: 5
+max_memory_to_lock_fraction: 0.2
+performance_core_threads: 4
+authorization_options:
+  enabled: true
+  transitional_mode: disabled
+  allow_row_level_security: false
+shard_transport_options:
+  netty_client_request_timeout: 60000
+ldap_options:
+  user_memberof_attribute: memberof
+  ssl_protocol: TLS
+  group_search_type: directory_search
+  search_password: ''
+  all_parent_groups_memberof_attribute: isMemberOf
+  credentials_validity_in_ms: 0
+  truststore_path: ''
+  groups_update_interval_in_ms: 0
+  groups_validity_in_ms: 0
+  search_validity_in_seconds: 0
+  user_search_base: ''
+  user_search_filter: (uid={0})
+  server_host: ''
+  hostname_verification: false
+  group_name_attribute: cn
+  server_port: 389
+  use_ssl: false
+  truststore_type: jks
+  connection_pool:
+    max_active: 8
+    max_idle: 8
+  search_dn: ''
+  extra_group_search_bases: []
+  group_search_filter: (|(uniquemember={0})|(cn={0}))
+  dns_service_discovery:
+    lookup_timeout_ms: 5000
+    retention_duration_ms: 600000
+    polling_interval_ms: 0
+  use_tls: false
+  extra_user_search_bases: []
+ttl_index_rebuild_options:
+  fixed_rate_period: 300
+  initial_delay: 20
+  max_docs_per_batch: 4096
+  thread_pool_size: 1
+load_max_time_per_core: 5
+graph_events:
+  ttl_seconds: 600

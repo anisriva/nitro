@@ -6,20 +6,39 @@ FROM datastax/dse-server:5.1.24
 
 ENV DEBEZIUM_VERSION=1.6.1.Final \
     MAVEN_CENTRAL="https://repo1.maven.org/maven2" \
-    CASSANDRA_YAML=/opt/dse/resources/cassandra/conf \
+    CASSANDRA_YAML=/config \
+    DOWNLOAD_HOME=/opt/dse/resources/debezium/wrk \
+    # DOWNLOAD_HOME=/opt/dse/resources/debezium \
     DEBEZIUM_HOME=/opt/dse/resources/debezium
 
-COPY cassandra.yaml $CASSANDRA_YAML
+COPY dc_config/cassandra.yaml $CASSANDRA_YAML
+COPY dc_config/dse.yaml $CASSANDRA_YAML
 
-RUN mkdir $DEBEZIUM_HOME
-RUN curl -fSL -o $DEBEZIUM_HOME/debezium-connector-cassandra.jar \
+RUN mkdir $DEBEZIUM_HOME && \
+    mkdir $DOWNLOAD_HOME 
+RUN curl -fSL -o $DOWNLOAD_HOME/debezium-connector-cassandra.jar \
                  $MAVEN_CENTRAL/io/debezium/debezium-connector-cassandra/$DEBEZIUM_VERSION/debezium-connector-cassandra-$DEBEZIUM_VERSION-jar-with-dependencies.jar
 
-COPY log4j.properties config.properties inventory.cql $DEBEZIUM_HOME/
-COPY startup-script.sh $DEBEZIUM_HOME/startup-script.sh
+COPY log4j.properties config.properties inventory.cql $DOWNLOAD_HOME/
+COPY startup-script.sh $DOWNLOAD_HOME/startup-script.sh
 
-RUN chmod +x $DEBEZIUM_HOME/startup-script.sh &&\
-    chown -R dse:dse $CASSANDRA_YAML/cassandra.yaml $DEBEZIUM_HOME
+# RUN chmod +x $DEBEZIUM_HOME/startup-script.sh &&\
+#     chown -R dse:dse $CASSANDRA_YAML/cassandra.yaml $DEBEZIUM_HOME
+
+RUN cp $DOWNLOAD_HOME/config.properties $DEBEZIUM_HOME/config.properties && \
+    cp $DOWNLOAD_HOME/inventory.cql $DEBEZIUM_HOME/inventory.cql && \
+    cp $DOWNLOAD_HOME/log4j.properties $DEBEZIUM_HOME/log4j.properties && \
+    cp $DOWNLOAD_HOME/startup-script.sh $DEBEZIUM_HOME/startup-script.sh && \
+    chmod +x $DEBEZIUM_HOME/config.properties && \
+    chmod +x $DEBEZIUM_HOME/inventory.cql && \
+    chmod +x $DEBEZIUM_HOME/log4j.properties && \
+    chmod +x $DEBEZIUM_HOME/startup-script.sh && \
+    # chmod +x $CASSANDRA_YAML/cassandra.yaml && \
+    chown -R dse:dse $DEBEZIUM_HOME/config.properties $DEBEZIUM_HOME && \
+    chown -R dse:dse $DEBEZIUM_HOME/inventory.cql $DEBEZIUM_HOME && \
+    chown -R dse:dse $DEBEZIUM_HOME/log4j.properties $DEBEZIUM_HOME && \
+    chown -R dse:dse $DEBEZIUM_HOME/startup-script.sh $DEBEZIUM_HOME 
+    # chown -R dse:dse $CASSANDRA_YAML/cassandra.yaml $DEBEZIUM_HOME
 
 USER dse
 

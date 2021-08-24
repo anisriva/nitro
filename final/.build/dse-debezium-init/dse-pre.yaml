@@ -32,8 +32,7 @@ services:
       - kafka
     volumes:
       - C:\GitHub\Work\Nitro\workdir\inserts.sql:/home/cassandra/sqls/insert.sql
-      - C:\GitHub\Work\Nitro\final\.build\dse-debezium-init\cassandra.yaml:/config/cassandra.yaml
-      - C:\GitHub\Work\Nitro\final\.build\dse-debezium-init\cassandra.yaml:/config/cassandra-rackdc.properties
+      - C:\GitHub\Work\Nitro\final\.build\dse-debezium-init\dc_config\:/config/
       - C:\GitHub\Work\Nitro\final\.build\dse-debezium-init\:/home/
   kafka_manager:
     container_name: kafka_manager
