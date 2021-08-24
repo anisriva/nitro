@@ -18,7 +18,8 @@ services:
       - ZOOKEEPER_CONNECT=zookeeper:2181/kafka
   cassandra:
     container_name: cassandra
-    image: anieshaz/cassandra:3.11
+    # image: anieshaz/cassandra:3.11
+    image: anieshaz/dse-cassandra:5.1.24
     ports:
       - "0.0.0.0:9042:9042"
     links:
