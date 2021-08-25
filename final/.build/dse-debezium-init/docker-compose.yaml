@@ -1,0 +1,50 @@
+version: '3.3'
+services:
+  zookeeper:
+    container_name: zookeeper-dse
+    image: debezium/zookeeper:1.6
+    ports:
+      - "0.0.0.0:2191:2181"
+      - "0.0.0.0:2898:2888"
+      - "0.0.0.0:3898:3888"
+  kafka:
+    container_name: kafka-dse
+    image: debezium/kafka:1.6
+    ports:
+      - "0.0.0.0:9102:9092"
+    links:
+      - zookeeper
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181/kafka
+  cassandra:
+    container_name: cassandra-dse
+    image: datastax/dse-server:5.1.24
+    environment:
+      - DS_LICENSE=accept
+      - DC=dc1
+      - RACK=rack1
+      - DEBEZIUM_VERSION=1.6.1.Final
+      - CASSANDRA_YAML=/opt/dse/resources/cassandra/conf
+      - DEBEZIUM_HOME=/opt/dse/resources/debezium
+      - CASSANDRA_HOME=/opt/dse/resources/cassandra
+      - CASSANDRA_CONFIG_HOME=/opt/dse/resources/cassandra/conf
+      - CASSANDRA_CONF=/opt/dse/resources/cassandra/conf
+    ports:
+      - "0.0.0.0:9052:9042"
+    links:
+      - zookeeper
+      - kafka
+    volumes:
+      - ./configs/:/config/
+      - ./configs/:/etc/cassandra/
+      - ./configs/:/opt/cassandra/conf/
+      - ./configs/:/home/
+  kafka_manager:
+    container_name: kafka_manager-dse
+    image: hlebalbau/kafka-manager:1.3.3.18
+    ports:      
+        - "0.0.0.0:9010:9000"
+    environment:
+        ZK_HOSTS: "zookeeper:2181"
+        APPLICATION_SECRET: "random-secret"
+    command: -Dpidfile.path=/dev/null          
