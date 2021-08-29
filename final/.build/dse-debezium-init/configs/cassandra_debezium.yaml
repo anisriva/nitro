@@ -124,8 +124,8 @@ counter_write_request_timeout_in_ms: 5000
 cluster_name: DigiCertCluster
 # echo_attempts_before_reset: 10
 concurrent_counter_writes: 32
-endpoint_snitch: GossipingPropertyFileSnitch
-# endpoint_snitch: DseSimpleSnitch
+# endpoint_snitch: GossipingPropertyFileSnitch
+endpoint_snitch: SimpleSnitch
 # cross_dc_rtt_in_ms: 0
 hints_directory: /var/lib/cassandra/hints
 dynamic_snitch_badness_threshold: 0.1

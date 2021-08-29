@@ -16,9 +16,9 @@ services:
       - zookeeper
     environment:
       - ZOOKEEPER_CONNECT=zookeeper:2181/kafka
-  cassandra:
+  cassandra-dse:
     container_name: cassandra-dse
-    image: datastax/dse-server:5.1.24
+    image: anieshaz/dse-server:5.1.24
     environment:
       - DS_LICENSE=accept
       - DC=dc1
@@ -26,19 +26,23 @@ services:
       - DEBEZIUM_VERSION=1.6.1.Final
       - CASSANDRA_YAML=/opt/dse/resources/cassandra/conf
       - DEBEZIUM_HOME=/opt/dse/resources/debezium
-      - CASSANDRA_HOME=/opt/dse/resources/cassandra
-      - CASSANDRA_CONFIG_HOME=/opt/dse/resources/cassandra/conf
-      - CASSANDRA_CONF=/opt/dse/resources/cassandra/conf
+      # - CLASSPATH=/opt/dse/resources/cassandra/lib/everywhere-strategy-cassandra-4.0-1.0.0.jar
+      # - CASSANDRA_HOME=/opt/dse/resources/cassandra
+      # - CASSANDRA_CONFIG_HOME=/opt/dse/resources/cassandra/conf
+      # - CASSANDRA_CONF=/opt/dse/resources/cassandra/conf
     ports:
       - "0.0.0.0:9052:9042"
     links:
       - zookeeper
       - kafka
     volumes:
-      - ./configs/:/config/
-      - ./configs/:/etc/cassandra/
-      - ./configs/:/opt/cassandra/conf/
+      # - C:\GitHub\Global\debezium-dse\configs\cassandra.yaml:/config/cassandra.yaml
+      # - ./configs/:/etc/cassandra/
+      # - ./configs/:/opt/cassandra/conf/
       - ./configs/:/home/
+      - ./configs/:/config/
+      - ./configs/cassandra_debezium.yaml:/opt/dse/resources/cassandra/conf/cassandra_debezium.yaml
+      - C:\GitHub\Work\Nitro\workdir\inserts.sql:/home/inserts.sql
   kafka_manager:
     container_name: kafka_manager-dse
     image: hlebalbau/kafka-manager:1.3.3.18
