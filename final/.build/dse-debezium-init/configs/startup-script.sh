@@ -2,7 +2,6 @@
 
 # sh /opt/cassandra/bin/cassandra -f &
 
-
 mkdir $DEBEZIUM_HOME
 
 cp /home/config.properties $DEBEZIUM_HOME/config.properties
