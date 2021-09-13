@@ -13,7 +13,7 @@ def generate_word(size):
     return word
 
 def generate_inserts():
-    return "INSERT INTO testdb.customers(id,first_name,last_name,email) VALUES ({},'{}','{}','{}');".format(randint(1,int(argv[1])), generate_word(10), generate_word(15), generate_word(20))
+    return "INSERT INTO inventory.customers(id,first_name,last_name,email) VALUES ({},'{}','{}','{}');".format(randint(1,int(9999999)), generate_word(10), generate_word(15), generate_word(20), generate_word(20))
 
 if __name__ == '__main__':
     for i in range(int(argv[1])):

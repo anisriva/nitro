@@ -1,0 +1,86 @@
+version: '3.3'
+services:
+  seed_node_a:
+    image: "anieshaz/dse-server:5.1.24"
+    environment:
+      - DS_LICENSE=accept
+      - DC=trans
+      - CLUSTER_NAME=poc_cluster
+      - SNITCH=GossipingPropertyFileSnitch
+      - NUM_TOKENS=8
+      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+  nodea:
+    image: "anieshaz/dse-server:5.1.24"
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=seed_node_a
+      - DC=trans
+      - CLUSTER_NAME=poc_cluster
+      - SNITCH=GossipingPropertyFileSnitch
+      - NUM_TOKENS=8
+      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+    links:
+      - seed_node_a
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+
+  seed_node_b:
+    image: "anieshaz/dse-server:5.1.24"
+    command: -k
+    environment:
+      - DS_LICENSE=accept
+      - DC=analytics
+      - SEEDS=seed_node_a
+      - CLUSTER_NAME=poc_cluster
+      - SNITCH=GossipingPropertyFileSnitch
+      - NUM_TOKENS=8
+      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+    links:
+      - seed_node_a
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+  nodeb:
+    image: "anieshaz/dse-server:5.1.24"
+    command: -k
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=seed_node_a,seed_node_b
+      - DC=analytics
+      - CLUSTER_NAME=poc_cluster
+      - SNITCH=GossipingPropertyFileSnitch
+      - NUM_TOKENS=8
+      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+    links:
+      - seed_node_a
+      - seed_node_b
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+
+  ds-studio:
+    container_name: ds-studio
+    image: datastax/dse-studio
+    ports:
+      - 8080:9091
+    links:
+      - seed_node_a
+      - seed_node_b
+    environment:
+      - DS_LICENSE=accept 
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
