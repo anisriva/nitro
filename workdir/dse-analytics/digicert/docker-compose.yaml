@@ -10,6 +10,9 @@ services:
       - NUM_TOKENS=8
       - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
     # Allow DSE to lock memory with mlock
+    ports: 
+      - 8983:8983
+      - 9042:9042
     cap_add:
     - IPC_LOCK
     ulimits:
@@ -46,6 +49,8 @@ services:
     links:
       - seed_node_a
     # Allow DSE to lock memory with mlock
+    ports:
+      - 8888:8888
     cap_add:
     - IPC_LOCK
     ulimits:

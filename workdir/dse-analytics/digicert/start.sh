@@ -1,3 +1,12 @@
+
+if [ "$1" == "" ] 
+then
+    instance=6
+else instance=$1
+fi
+
+echo "Spinning up $instance instances"
+
 check_server() {
     servers_up=`docker exec -it digicert_seed_node_a_1 dsetool status | grep UN | wc -l`
     if [ $servers_up != "$1" ]
@@ -59,3 +68,5 @@ echo "Do all the node repair"
 for i in `docker container ls | awk '{print $1}' | grep -v "CONTAINER"`
 do docker exec -it $i nodetool repair -full
 done
+
+echo "Cluster is up and ready to be used"

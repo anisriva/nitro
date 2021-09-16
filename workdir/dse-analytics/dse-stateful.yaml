@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dse-analytics
+  namespace: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dse-analytics
+  serviceName: dse-analytics
+  template:
+    metadata:
+      labels:
+        app: dse-analytics
+    spec:
+      containers: 
+        - name: dse-analytics
+          args:
+            - '-k'
+          image: registry.de.dev.blu.digiCert.com/dse-pyserver:5.1.24
+          ports:
+            - name: port-1
+              containerPort: 8983
+            - name: port-2
+              containerPort: 9042
+            - name: port-3
+              containerPort: 8888              
+          env:
+            - name: DS_LICENSE
+              value: accept
+            - name: JVM_EXTRA_OPTS
+              value: -Xmx4g -Xms4g
+            - name: PYTHONPATH
+              value: ${PYTHONPATH}:/opt/dse/resources/spark/python/
+            - name: PATH
+              value: ${PATH}:/opt/dse/.local/bin/

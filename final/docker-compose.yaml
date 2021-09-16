@@ -15,7 +15,7 @@ services:
     volumes:
       - ./dse/configs/:/config/    
       - ./dse/configs/:/home/
-      - ./mnt/cassandra/:/var/lib/cassandra/
+      # - ./mnt/cassandra/:/var/lib/cassandra/
   ds-studio:
     container_name: ds-studio
     image: datastax/dse-studio

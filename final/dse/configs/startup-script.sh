@@ -35,7 +35,7 @@ done;
 for i in `cqlsh -u cassandra -p cassandra -e "desc full schema" | grep -i everywhere | awk '{print $3}'`;
 do
   cqlsh -u cassandra -p cassandra -e  "alter KEYSPACE $i WITH replication = {'class': 'NetworkTopologyStrategy', 'dc1': 1};";
-  echo "Converted keyspace:$i to NetworkTopologyStrategy from EverywhereStratergy"
+  echo "Converted keyspace:$i from EverywhereStratergy to NetworkTopologyStrategy "
 done
 
 cqlsh -f $DEBEZIUM_HOME/inventory.sql
