@@ -55,6 +55,9 @@ services:
     - IPC_LOCK
     ulimits:
       memlock: -1
+    volumes: 
+      - ./mnt/cassandra/seed-b/cassandra:/var/lib/cassandra
+      - ./mnt/cassandra/seed-b/spark:/var/lib/spark
   nodeb:
     image: "anieshaz/dse-server:5.1.24"
     command: -k
