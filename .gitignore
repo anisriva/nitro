@@ -3,3 +3,5 @@ mnt
 cdata
 sendout
 nohup.out
+.build/
+workdir/
