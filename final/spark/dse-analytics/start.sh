@@ -1,5 +1,5 @@
 check_server() {
-    servers_up=`docker exec -it trans-seed dsetool status | grep UN | wc -l`
+    servers_up=`docker exec trans-seed dsetool status | grep UN | wc -l`
     if [ $servers_up != "$1" ]
     then
         echo "Waiting for the server to come up"
@@ -83,7 +83,7 @@ check_server 6
 echo 'All nodes started'
 
 echo "Setting up all the spark related keyspaces"
-docker exec -it trans-seed cqlsh -u cassandra -p cassandra -e "ALTER KEYSPACE cfs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
+docker exec trans-seed cqlsh -u cassandra -p cassandra -e "ALTER KEYSPACE cfs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
 ALTER KEYSPACE cfs_archive WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
 ALTER KEYSPACE dse_leases WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
 ALTER KEYSPACE dsefs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
@@ -91,8 +91,8 @@ ALTER KEYSPACE \"HiveMetaStore\" WITH replication = {'class': 'NetworkTopologySt
 ALTER KEYSPACE spark_system WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};"
 
 echo "Do all the node repair"
-docker exec -it trans-seed nodetool repair -full
-docker exec -it analytics-seed nodetool repair -full
+docker exec trans-seed nodetool repair -full
+docker exec analytics-seed nodetool repair -full
 
 if [ -d "mnt\cassandra\analytics-seed\cassandra\data\PortfolioDemo" ]
 then
@@ -105,14 +105,14 @@ else
     
     echo "Altering portfolio keyspace"
     
-    docker exec -it trans-seed \
+    docker exec trans-seed \
      cqlsh -u cassandra \
      -p cassandra \
      -e "ALTER KEYSPACE \"PortfolioDemo\" WITH replication = {'class': 'NetworkTopologyStrategy', 'trans':1, 'analytics':1};"
     
     echo "Redistribute data, do all the node repair"
     for i in `docker container ls | awk '{print $1}' | grep -v "CONTAINER"`
-    do docker exec -it $i nodetool repair -full
+    do docker exec $i nodetool repair -full
     done
 fi
 
