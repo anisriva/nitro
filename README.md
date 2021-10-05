@@ -16,7 +16,7 @@ Below were some technologies and third-party vendors who I reached out to:
 
 Because of limitation with other options Debeizium and DSE Analytics turned out to be the best choices.
 
-![flow](resource\flow.png)
+![flow](./resource/flow.png)
 
 ## **Part 1 : Debezium**
 
@@ -73,7 +73,7 @@ The connector is tolerant of failures. As the connector reads commit logs and pr
 
 First Half (Cassandra to Kafka)
 
-![debezium](resource\debezium-connector.png)
+![debezium](./resource/debezium-connector.png)
 
 Second Half (Kafka to Mariadb)
 
@@ -189,7 +189,7 @@ We have a 8 node transactional data center and we are planning to go for either 
 
 ### **Setup Diagram**
 
-![dse-collated](resource\dse-collated.png) ![dse-isolated](resource\dse-isolated.png)
+![dse-collated](./resource/dse-collated.png) ![dse-isolated](./resource/dse-isolated.png)
 
 ### **Thriftserver for SQL like feature**
 
@@ -237,10 +237,10 @@ The inhouse setup includes the thriftserver setup and no additional work is requ
       <https://dbeaver.com/download/lite/>
    2. Click on database on the menu bar and click on new database connection.
    3. Select **Apache Hive**
-      ![Hive Setup](resource\hive-setup.png)
+      ![Hive Setup](./resource/hive-setup.png)
    4. Click next and setup the JDBC parameters as show in below image
-      ![Connection String](resource\hive-uri.png)
+      ![Connection String](./resource/hive-uri.png)
    5. Now we are all set to start running HQL queries
-      ![HQL](resource\hql.png)
+      ![HQL](./resource/hql.png)
 
 **Note** : 10000 port should be exposed for the docker container and for username and password use “dse”
