@@ -19,6 +19,8 @@ services:
     - IPC_LOCK
     ulimits:
       memlock: -1
+    volumes: 
+      - ./mnt/cassandra/trans-seed/cassandra:/var/lib/cassandra      
   trans-node-1:
     image: "anieshaz/dse-server:5.1.24"
     # command: -Dcassandra.consistent.rangemovement=false
@@ -38,6 +40,8 @@ services:
     - IPC_LOCK
     ulimits:
       memlock: -1
+    volumes: 
+      - ./mnt/cassandra/trans-node-1/cassandra:/var/lib/cassandra
   trans-node-2:
     image: "anieshaz/dse-server:5.1.24"
     # command: -Dcassandra.consistent.rangemovement=false
@@ -57,6 +61,8 @@ services:
     - IPC_LOCK
     ulimits:
       memlock: -1
+    volumes: 
+      - ./mnt/cassandra/trans-node-2/cassandra:/var/lib/cassandra
   analytics-seed:
     image: "anieshaz/dse-server:5.1.24"
     # command: -Dcassandra.consistent.rangemovement=false
@@ -69,13 +75,15 @@ services:
       - CLUSTER_NAME=poc_cluster
       - SNITCH=GossipingPropertyFileSnitch
       - NUM_TOKENS=8
-      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+      - JVM_EXTRA_OPTS=-Xmx5g -Xms1g
       - PYTHONPATH=/opt/dse/resources/spark/python
     links:
       - trans-seed
     # Allow DSE to lock memory with mlock
     ports:
       - 8888:8888
+      - 10000:10000
+      - 7080-7100:7080-7100
     cap_add:
     - IPC_LOCK
     ulimits:
@@ -95,7 +103,7 @@ services:
       - CLUSTER_NAME=poc_cluster
       - SNITCH=GossipingPropertyFileSnitch
       - NUM_TOKENS=8
-      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+      - JVM_EXTRA_OPTS=-Xmx2g -Xms1g
     links:
       - trans-seed
       - analytics-seed
@@ -119,7 +127,7 @@ services:
       - CLUSTER_NAME=poc_cluster
       - SNITCH=GossipingPropertyFileSnitch
       - NUM_TOKENS=8
-      - JVM_EXTRA_OPTS=-Xmx1g -Xms1g
+      - JVM_EXTRA_OPTS=-Xmx2g -Xms1g
     links:
       - trans-seed
       - analytics-seed
@@ -146,4 +154,4 @@ services:
     ulimits:
       memlock: -1
     volumes: 
-      - ./mnt/ds-studio/:/var/lib/datastax-studio     
+      - ./mnt/ds-studio/:/var/lib/datastax-studio

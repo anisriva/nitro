@@ -14,7 +14,7 @@ cleanup(){
     if [ "$1" == "fresh" ] && [ -d "mnt" ]
     then
         echo "Cleaning up the directory"
-        rm -rf mnt/
+        # rm -rf mnt/
     else
         echo 'Normal Start'
     fi
@@ -82,6 +82,26 @@ check_server 6
 
 echo 'All nodes started'
 
+while ! docker exec analytics-seed grep -q "DSE startup complete" //var//log//cassandra//system.log
+do
+  sleep 10
+  echo 'Waiting for Analytics cluster to stabalize'
+done;
+
+while !  docker exec analytics-seed grep -q "SPARK-WORKER service is running" //var//log//spark//worker//worker.log
+do
+  sleep 10
+  echo 'Waiting for Spark Worker to start'
+done;
+
+while ! docker exec analytics-seed grep -q "SPARK-MASTER service is running" //var//log//spark//master//master.log
+do
+  sleep 10
+  echo 'Waiting for Spark Master to start'
+done;
+
+echo 'All nodes started, setting up all the spark related keyspaces' 
+
 echo "Setting up all the spark related keyspaces"
 docker exec trans-seed cqlsh -u cassandra -p cassandra -e "ALTER KEYSPACE cfs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
 ALTER KEYSPACE cfs_archive WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
@@ -115,6 +135,9 @@ else
     do docker exec $i nodetool repair -full
     done
 fi
+
+echo "Starting thrift server"
+docker exec analytics-seed dse spark-sql-thriftserver start --hiveconf hive.server2.thrift.client.user=dse hive.server2.thrift.client.password=dse
 
 echo "Run below command to start jupyter:
 --------------------------------------
