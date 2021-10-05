@@ -237,10 +237,10 @@ The inhouse setup includes the thriftserver setup and no additional work is requ
       <https://dbeaver.com/download/lite/>
    2. Click on database on the menu bar and click on new database connection.
    3. Select **Apache Hive**
-      ![Hive Setup](./resource/hive-setup.png)
+![Hive Setup](./resource/hive-setup.png)
    4. Click next and setup the JDBC parameters as show in below image
-      ![Connection String](./resource/hive-uri.png)
+![Connection String](./resource/hive-uri.png)
    5. Now we are all set to start running HQL queries
-      ![HQL](./resource/hql.png)
+![HQL](./resource/hql.png)
 
 **Note** : 10000 port should be exposed for the docker container and for username and password use “dse”
