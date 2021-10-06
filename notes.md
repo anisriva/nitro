@@ -8,3 +8,5 @@ some experimental and preview releases made available through DataStax and Debez
 ### DataStax Kafka Connector CDC Source
 
 ### Debezium Connector for Cassandra CDC
+
+### DataStax Analytics using Spark

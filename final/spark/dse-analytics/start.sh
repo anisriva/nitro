@@ -14,7 +14,7 @@ cleanup(){
     if [ "$1" == "fresh" ] && [ -d "mnt" ]
     then
         echo "Cleaning up the directory"
-        # rm -rf mnt/
+        rm -rf mnt/
     else
         echo 'Normal Start'
     fi
@@ -50,35 +50,35 @@ docker-compose -f $compose_path up -d \
 
 check_server 2
 
-echo 'Starting transactional node'
-docker-compose -f $compose_path up -d \
---scale trans-node-1=1 \
---scale trans-node-2=0 \
---scale analytics-node-1=0 \
---scale analytics-node-2=0 
+# echo 'Starting transactional node'
+# docker-compose -f $compose_path up -d \
+# --scale trans-node-1=1 \
+# --scale trans-node-2=0 \
+# --scale analytics-node-1=0 \
+# --scale analytics-node-2=0 
 
-check_server 3
+# check_server 3
 
-echo 'Starting transactional node'
-docker-compose -f $compose_path up -d \
---scale trans-node-2=1 \
---scale analytics-node-1=0 \
---scale analytics-node-2=0 
+# echo 'Starting transactional node'
+# docker-compose -f $compose_path up -d \
+# --scale trans-node-2=1 \
+# --scale analytics-node-1=0 \
+# --scale analytics-node-2=0 
 
-check_server 4
+# check_server 4
 
-echo 'Starting analytical node'
-docker-compose -f $compose_path up -d \
---scale analytics-node-1=1 \
---scale analytics-node-2=0 
+# echo 'Starting analytical node'
+# docker-compose -f $compose_path up -d \
+# --scale analytics-node-1=1 \
+# --scale analytics-node-2=0 
 
-check_server 5
+# check_server 5
 
-echo 'Starting analytical node'
-docker-compose -f $compose_path up -d \
---scale analytics-node-2=1
+# echo 'Starting analytical node'
+# docker-compose -f $compose_path up -d \
+# --scale analytics-node-2=1
 
-check_server 6
+# check_server 6
 
 echo 'All nodes started'
 
@@ -87,6 +87,18 @@ do
   sleep 10
   echo 'Waiting for Analytics cluster to stabalize'
 done;
+
+echo 'All nodes started, setting up all the spark related keyspaces' 
+
+sleep 60 
+
+echo "Setting up all the spark related keyspaces"
+docker exec trans-seed cqlsh -u cassandra -p cassandra -e "ALTER KEYSPACE cfs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};
+ALTER KEYSPACE cfs_archive WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};
+ALTER KEYSPACE dse_leases WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};
+ALTER KEYSPACE dsefs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};
+ALTER KEYSPACE \"HiveMetaStore\" WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};
+ALTER KEYSPACE spark_system WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':1};"
 
 while !  docker exec analytics-seed grep -q "SPARK-WORKER service is running" //var//log//spark//worker//worker.log
 do
@@ -100,16 +112,6 @@ do
   echo 'Waiting for Spark Master to start'
 done;
 
-echo 'All nodes started, setting up all the spark related keyspaces' 
-
-echo "Setting up all the spark related keyspaces"
-docker exec trans-seed cqlsh -u cassandra -p cassandra -e "ALTER KEYSPACE cfs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
-ALTER KEYSPACE cfs_archive WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
-ALTER KEYSPACE dse_leases WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
-ALTER KEYSPACE dsefs WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
-ALTER KEYSPACE \"HiveMetaStore\" WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};
-ALTER KEYSPACE spark_system WITH replication = {'class': 'NetworkTopologyStrategy', 'analytics':3};"
-
 echo "Do all the node repair"
 docker exec trans-seed nodetool repair -full
 docker exec analytics-seed nodetool repair -full
@@ -119,9 +121,9 @@ then
     echo "Keyspace already created skipping creation"
 else
     echo "Creating portfolio schema in the transactional datacenter"
-    docker container exec -it trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o INSERT_PRICES
-    docker container exec -it trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o UPDATE_PORTFOLIOS
-    docker container exec -it trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o INSERT_HISTORICAL_PRICES -n 100
+    docker exec trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o INSERT_PRICES
+    docker exec trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o UPDATE_PORTFOLIOS
+    docker exec trans-seed //opt//dse//demos//portfolio_manager//bin//pricer -o INSERT_HISTORICAL_PRICES -n 100
     
     echo "Altering portfolio keyspace"
     
@@ -139,21 +141,15 @@ fi
 echo "Starting thrift server"
 docker exec analytics-seed dse spark-sql-thriftserver start --hiveconf hive.server2.thrift.client.user=dse hive.server2.thrift.client.password=dse
 
-echo "Run below command to start jupyter:
---------------------------------------
-1. Enter the docker container 
+echo "Starting jupyter notebook"
+docker exec analytics-seed sh //opt//dse//resources//spark//bin//start_jupyter.sh
 
-    docker container exec -it analytics-seed bash
-
-2. Go to the working directory
-
-    cd /var/lib/spark/jupyter
-
-3. Run the jupyter notebook
-
-    cd /var/lib/spark/jupyter
-    nohup jupyter notebook --ip=analytics-seed --port=8888 --NotebookApp.token='' --NotebookApp.password='' &
-
-4. exit
+echo "Use below link to login to jupyter notebook:
+        http://localhost:8888
 "
-# winpty nohup docker container exec -it analytics-seed //opt//dse//.local//bin//jupyter notebook --ip=analytics-seed --port=8888 --NotebookApp.token='' --NotebookApp.password='' &
+
+echo "Connection String to connect to spark sql using sql clients : 
+    url : jdbc:hive2://localhost:10000/PortfolioDemo
+    uname : dse
+    password : dse
+"

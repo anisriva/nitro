@@ -212,19 +212,10 @@ The inhouse setup includes the thriftserver setup and no additional work is requ
 1. Use the spark script to run the setup
    ```sh start.sh```
 1. Run DSE-studio using below link
-   [DS-Studio](http://localhost:8080)
+   [DS-Studio](http://localhost:9091)
 1. Run Jupyter notebook by following below steps
-   1. Enter inside the docker contianer
-      ```docker container exec -it analytics-seed bash```
-   1. Go the work directory
-      ```cd /var/lib/spark/jupyter```
-   1. Start Jupyter notebook
-      ```nohup jupyter notebook --ip=analytics-seed --port=8888 --NotebookApp.token='' --NotebookApp.password='' &```
-   1. Exit out of docker container
-      ```exit```
-
-1. Use below link to access the jupyter notebook
    [Jupyter](http://localhost:8888)
+
 1. Using Spark shell
    1. Spark-sql
       ```docker container exec -it analytics-seed dse spark-sql```
