@@ -2,7 +2,7 @@
 
 ## **Introduction**
 
-The POC on this project was focused on getting a technology which can enable us to centralize the data from our cassandra database into our MH lake which is a Mariadb database.
+The POC on this project was focused on getting a technology which can enable us to centralize the data from our cassandra database into our data lake which is a Mariadb database.
 
 Below were some technologies and third-party vendors who I reached out to:
 
