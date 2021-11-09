@@ -1,3 +1,21 @@
+#!/bin/bash
+#################################################################                                                    
+# Use this to start the cassandra cluster inhouse               #                                                   
+# 1 transactional and 1 analytics node                          #                                       
+# Usage :                                                       #          
+# sh start.sh <option> [fresh]                                  #                               
+#  :param - fresh - Cleanup mounted data                        #                                         
+#                                                               #  
+# ex :                                                          #        
+#     sh start.sh : Normal start                                #                                 
+#     sh start.sh : Fresh start with cleanup                    #                                             
+#                                                               #  
+# Author : Animesh Srivastava                                   #                              
+#                                                               #  
+#################################################################                                                    
+export HOME=`pwd`
+compose_path=$HOME/docker-compose.yaml
+
 check_server() {
     servers_up=`docker exec trans-seed dsetool status | grep UN | wc -l`
     if [ $servers_up != "$1" ]
@@ -36,6 +54,9 @@ docker-compose -f $compose_path up -d \
 --scale trans-node-2=0 \
 --scale analytics-node-1=0 \
 --scale analytics-node-2=0 \
+--scale postgres=1 \
+--scale scheduler=1 \
+--scale webserver=1 \
 --remove-orphans
 
 check_server 1
@@ -156,5 +177,9 @@ echo "Use below link to login to jupyter notebook:
 echo "Connection String to connect to spark sql using sql clients : 
     url : jdbc:hive2://localhost:10000/PortfolioDemo
     uname : dse
-    password : dse
+    password : password
+
+    Start the ssh server in the analytics-seed:
+    > docker exec -it analytics-seed bash
+    > echo password | sudo -S /etc/init.d/ssh start
 "

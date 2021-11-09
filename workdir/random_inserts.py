@@ -1,5 +1,5 @@
-from random import randint, choice
 from sys import argv
+from random import randint, choice
 
 def generate_letter():
     lower = chr(randint(ord('a'), ord('z')))

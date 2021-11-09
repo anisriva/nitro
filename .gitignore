@@ -5,3 +5,4 @@ sendout
 nohup.out
 .build/
 workdir/
+!./final/spark/dse-analytics/mnt/cassandra/analytics-seed/spark/jupyter/
